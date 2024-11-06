@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Speed Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f4;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Network Speed Test</h1>
+    <button id="startTest">Start Speed Test</button>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('startTest').addEventListener('click', function() {
+            const imageUrl = 'https://slenvn.site/img/logo.jpg'; // Replace with your test file URL
+            const startTime = new Date().getTime();
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('GET', imageUrl + '?' + new Date().getTime(), true); // Add timestamp to prevent caching
+            xhr.responseType = 'blob'; // Specify the response type as a blob
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const duration = (new Date().getTime() - startTime) / 1000; // Duration in seconds
+                    const sizeInBits = xhr.response.size * 8; // Size in bits
+                    const speedMbps = (sizeInBits / duration) / (1024 * 1024); // Convert to Mbps
+                    document.getElementById('result').innerText = `Download speed: ${speedMbps.toFixed(2)} Mbps`;
+                } else {
+                    document.getElementById('result').innerText = 'Error loading file.';
+                }
+            };
+
+            xhr.onerror = function() {
+                document.getElementById('result').innerText = 'Error during the speed test.';
+            };
+
+            xhr.send();
+        });
+    </script>
+</body>
+</html>
